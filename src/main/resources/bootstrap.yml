@@ -1,0 +1,26 @@
+spring:
+  cloud:
+    config:
+      name: {application} # 对应 {application} 部分
+      profile: discovery # 对应 {profile} 部分
+      label: discovery # 对应 {label} 部分，即 Git 的分支。如果配置中心使用的是本地存储，则该参数无用
+      fail-fast: true
+      retry:
+        initial-interval: 3000
+        max-attempts: 10
+        max-interval: 5000
+        multiplier: 1.1
+      username: test
+      password: 1234567
+      discovery:
+        enabled: true
+        service-id: configServer
+    discovery:
+      enabled: true
+    nacos:
+      discovery:
+        enabled: true
+        server-addr: ${DISCOVERY_ADDRESS:localhost:8848}
+        service: Gateway
+  application:
+    name: gateway

@@ -1,0 +1,81 @@
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+}
+plugins {
+    id 'org.springframework.boot' version '3.0.2'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'java'
+}
+apply plugin: 'maven-publish'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+group = 'com'
+version = '1.0.0'
+description = """管理系统"""
+sourceCompatibility = '17'
+def sourceEncoding = 'UTF-8'
+[compileJava, compileTestJava, javadoc]*.options*.encoding = sourceEncoding
+ext.sharedManifest = manifest {
+    attributes(
+      "Implementation-Title": "Gradle",
+      "Implementation-Vendor-Id": "com",
+      "Implementation-Vendor": "公司",
+      "Specification-Vendor": "公司",
+      "Specification-Version": "${version}",
+      "Build-Jdk": "",
+      "Created-By": "Gradle"
+    )
+}
+
+configurations {
+    compile.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenLocal()
+}
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${spring_cloud_dependencies}"
+        mavenBom "com.alibaba.cloud:spring-cloud-alibaba-dependencies:${alibaba_cloud_dependencies}"
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+
+    implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery'
+//    implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config'
+//    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'com.playtika.reactivefeign:feign-reactor-spring-cloud-starter:3.2.6'
+    implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
+    implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+    implementation 'io.github.openfeign:feign-okhttp'
+
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.apache.commons:commons-collections4:4.4'
+    implementation 'commons-io:commons-io:2.11.0'
+    implementation 'com.google.guava:guava:31.1-jre'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
