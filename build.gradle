@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        mavenLocal()
+        mavenCentral()
     }
 }
 plugins {
@@ -41,7 +41,7 @@ configurations {
 }
 
 repositories {
-    mavenLocal()
+    mavenCentral()
 }
 dependencyManagement {
     imports {
